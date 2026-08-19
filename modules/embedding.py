@@ -33,7 +33,7 @@ from sentence_transformers import SentenceTransformer
 class SentenceTransformerEmbeddings:
     def __init__(self):
         try:
-            self.model = SentenceTransformer('all-MiniLM-L6-v2')
+            self.model = SentenceTransformer('paraphrase-MiniLM-L3-v2')
             print(f"Embedding model loaded successfully {self.model}. Embedding dimension: {self.model.get_embedding_dimension()}")
         except Exception as e:
             print(f"Error loading embedding model: {e}")
