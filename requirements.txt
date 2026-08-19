@@ -1,0 +1,16 @@
+langgraph
+langchain
+fastapi
+langchain-community
+langchain-core
+langchain-groq
+PyPDF
+python-dotenv
+
+# Typing & Utilities
+pydantic
+requests
+tqdm
+uvicorn[standard]
+python-multipart
+sentence-transformers
