@@ -4,9 +4,14 @@ from langchain_core.vectorstores import InMemoryVectorStore
 from .embedding import SentenceTransformerEmbeddings
 
 
+vector_store = None
 
-vector_store = InMemoryVectorStore(embedding=SentenceTransformerEmbeddings())
-
+def load_vector_store():
+    global vector_store
+    if vector_store is None:
+        print("Loading embedding vector_store...")
+        vector_store = InMemoryVectorStore(embedding=SentenceTransformerEmbeddings())
+    return vector_store
 
 
 

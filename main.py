@@ -2,7 +2,7 @@
 from collections.abc import AsyncIterable
 from fastapi.responses import StreamingResponse
 from langchain_core.messages import HumanMessage
-from modules.vectorstore import vector_store
+from modules.vectorstore import load_vector_store
 from modules.embedding import chunk_docs
 from langchain_community.document_loaders import PyPDFLoader
 import os
@@ -53,9 +53,11 @@ async def upload_file(file: UploadFile = File(...)):
         for doc in chunks:
             doc.metadata["session_id"] = session_id
             docs_with_ids.append(doc)
+        
+        vector_store = load_vector_store()
         vector_store.add_documents(docs_with_ids)
-
         # delete the document
+        os.remove(file_path)
        
         
         return {"message":"Documents uploaded successfully", "session_id":session_id}

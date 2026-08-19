@@ -1,7 +1,9 @@
+from modules.vectorstore import load_vector_store
+from modules.vectorstore import vector_store
 from typing import Annotated
 from langchain_core.tools import tool, InjectedToolArg
 from langgraph.prebuilt import ToolRuntime
-from modules.vectorstore import vector_store
+
 
 @tool
 def retrieve_documents(
@@ -22,7 +24,7 @@ def retrieve_documents(
     session_id = getattr(runtime.context, "session_id", None)
     if session_id is None:
         return "No session found"
-
+    vector_store = load_vector_store()
     results = vector_store.similarity_search(
         query=query,
         k=k,
