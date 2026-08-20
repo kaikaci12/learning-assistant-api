@@ -13,4 +13,5 @@ requests
 tqdm
 uvicorn[standard]
 python-multipart
-sentence-transformers
+huggingface_hub
+langchain_huggingface
