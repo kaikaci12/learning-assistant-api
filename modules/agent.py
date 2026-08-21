@@ -6,6 +6,7 @@ from .llm import model
 from tools import retrieve_documents
 from langgraph.prebuilt import ToolNode
 from dataclasses import dataclass
+from langgraph.checkpoint.memory import InMemorySaver
 model_with_tools = model.bind_tools([retrieve_documents])
 @dataclass
 class Context:
@@ -29,11 +30,11 @@ def should_continue(state:AgentState):
     if getattr(last_message, "tool_calls", None):
         return "tool"
     return END
-
-workflow = StateGraph(AgentState,context_schema=Context,)
+checkpointer = InMemorySaver()
+workflow = StateGraph(AgentState,context_schema=Context)
 workflow.add_node("llm",llm_node)
 workflow.add_node("tool",ToolNode(tools=[retrieve_documents]))
 workflow.add_edge(START,"llm")
 workflow.add_conditional_edges("llm",should_continue,["tool",END])
 workflow.add_edge("tool","llm")
-agent = workflow.compile()
+agent = workflow.compile(checkpointer=checkpointer)

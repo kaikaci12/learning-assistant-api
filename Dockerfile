@@ -2,7 +2,7 @@ FROM python:3.14-slim
 
 WORKDIR /app
 
-# Install system dependencies needed by sentence-transformers and PDF processing
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
@@ -19,4 +19,4 @@ COPY . .
 # Create the documents directory
 RUN mkdir -p /app/documents
 
-CMD ["uvicorn main:app --host 0.0.0.0 --port $PORT"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

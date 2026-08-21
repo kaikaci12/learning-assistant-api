@@ -1,6 +1,5 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
-from sentence_transformers import SentenceTransformer
 from dotenv import load_dotenv
 import os
 load_dotenv()

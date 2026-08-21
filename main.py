@@ -1,6 +1,7 @@
 
-from collections.abc import AsyncIterable
-from fastapi.responses import StreamingResponse
+
+from fastapi.responses import StreamingResponse,Response
+
 from langchain_core.messages import HumanMessage
 from modules.vectorstore import load_vector_store
 from modules.embedding import chunk_docs
@@ -14,18 +15,17 @@ from modules.agent import agent
 app = FastAPI(title="Learning Assistant API")
 
 from fastapi.middleware.cors import CORSMiddleware
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
 DOCUMENTS_DIR = Path("./documents")
 DOCUMENTS_DIR.mkdir(parents=True, exist_ok=True)
-
 sessions = []
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
@@ -53,7 +53,8 @@ async def upload_file(file: UploadFile = File(...)):
         for doc in chunks:
             doc.metadata["session_id"] = session_id
             docs_with_ids.append(doc)
-        
+
+
         vector_store = load_vector_store()
         vector_store.add_documents(docs_with_ids)
         # delete the document
@@ -114,3 +115,8 @@ async def chat_with_session(session_id: str, request: dict):
             yield "data: [DONE]\n\n"
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
+@app.get("/health")
+def health_check(response:Response):
+    
+    
+    return {"status": "ok"}
