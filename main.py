@@ -18,7 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -41,7 +41,6 @@ async def upload_file(file: UploadFile = File(...)):
         with open(file_path, "wb") as f:
             f.write(contents)
         
-
         # Write raw bytes directly in binary mode ('wb')
 
         loader = PyPDFLoader(str(file_path))
@@ -77,7 +76,6 @@ async def chat_with_session(session_id: str, request: dict):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Session not found"
         )
-
     config = { 
         "configurable": {
             "thread_id": session_id
@@ -117,6 +115,12 @@ async def chat_with_session(session_id: str, request: dict):
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 @app.get("/health")
 def health_check(response:Response):
-    
-    
     return {"status": "ok"}
+
+    
+def start():
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+if __name__ == "__main__":
+    start()
+

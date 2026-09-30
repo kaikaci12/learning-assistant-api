@@ -13,5 +13,5 @@ requests
 tqdm
 uvicorn[standard]
 python-multipart
-huggingface_hub
-langchain_huggingface
+langchain-openrouter
+nemoguardrails
